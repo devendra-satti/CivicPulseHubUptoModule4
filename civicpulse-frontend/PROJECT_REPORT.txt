@@ -1,0 +1,153 @@
+# CivicPulse Hub Frontend - Project Report
+
+## Project Overview
+CivicPulse Hub is a React-based frontend application for a smart city platform that empowers citizens to report civic issues (e.g., potholes, streetlights, sanitation), track their status, and collaborate with local authorities. 
+The platform supports role-based access for Citizens, Government Officers, and Admins, with features like OTP-based email verification for signup and password reset, JWT-based authentication, and real-time issue tracking.
+
+The application aims to bridge the gap between citizens and government by providing a unified platform for feedback, issue reporting, and community engagement.
+
+## File Structure
+The project follows a standard React application structure with TypeScript support:
+
+```
+civicpulse-frontend/
+├── index.html
+├── package.json
+└── src/
+    ├── App.tsx
+    ├── main.tsx
+    ├── api/
+    │   ├── admin.ts
+    │   ├── auth.ts
+    │   └── client.ts
+    ├── auth/
+    │   ├── AuthContext.tsx
+    │   └── ProtectedRoute.tsx
+    ├── components/
+    │   └── Auth/
+    │       ├── AuthForm.tsx
+    │       └── MarketingPanel.tsx
+    ├── hooks/
+    │   └── useOtp.ts
+    ├── pages/
+    │   ├── AdminDashBoard.tsx
+    │   ├── CitizenDashboard.tsx
+    │   ├── MainPage.css
+    │   ├── MainPage.tsx
+    │   └── OfficerDashBoard.tsx
+    └── types/
+        └── auth.ts
+```
+
+## Module Functionalities
+
+### Authentication Module (src/auth/)
+- **AuthContext.tsx**: Manages global authentication state using React Context. Handles user login/logout, JWT token storage in localStorage, and automatic session expiration checks using jwt-decode.
+- **ProtectedRoute.tsx**: Implements role-based route protection. Redirects users based on their roles (ADMIN, OFFICER, CITIZEN) and prevents unauthorized access to dashboards.
+
+### API Module (src/api/)
+- **client.ts**: Centralized Axios instance for backend API calls. Configures base URL, automatic JWT token attachment, and response interceptors for auto-logout on 401 errors.
+- **admin.ts**: Admin-specific API functions for fetching pending officers and approving them.
+- **auth.ts**: Authentication-related API calls (signin, signup, OTP send/verify, password reset).
+
+### Components Module (src/components/)
+- **Auth/AuthForm.tsx**: Comprehensive authentication form handling login, signup, OTP verification, and password reset. Supports role selection (Citizen/Officer) with conditional fields.
+- **Auth/MarketingPanel.tsx**: Static marketing component displaying platform features and branding.
+
+### Pages Module (src/pages/)
+- **MainPage.tsx**: Landing page with marketing panel and authentication form. Auto-redirects logged-in users to their respective dashboards.
+- **AdminDashBoard.tsx**: Admin interface for approving pending officer registrations. Displays a table of officers with approve buttons.
+- **CitizenDashboard.tsx**: Citizen interface showing user info and buttons for reporting new issues and tracking status.
+- **OfficerDashBoard.tsx**: Officer dashboard (implementation details not fully explored in provided files).
+- **FutureCitizenDashBoard. - No Use Copy Latertsx**: Appears to be a duplicate or unused file.
+
+### Hooks Module (src/hooks/)
+- **useOtp.ts**: Custom hook managing OTP state and logic. Handles sending OTP, verifying OTP, and preventing double submissions.
+
+### Types Module (src/types/)
+- **auth.ts**: TypeScript type definitions for authentication requests/responses, including AuthResponse, SigninRequest, and SignupRequest.
+
+## Project Flow
+
+1. **Application Startup**: App.tsx sets up routing with React Router. MainPage is the default route, wrapped in AuthProvider for global auth state.
+
+2. **User Authentication**:
+   - Users land on MainPage, which shows marketing content and AuthForm.
+   - For signup: User enters details, verifies email via OTP, selects role (Citizen requires ward number, Officer requires department).
+   - Officers need admin approval before login.
+   - For login: User enters credentials, JWT token is stored, and user is redirected to role-based dashboard.
+   - Password reset: Similar to signup, uses OTP verification.
+
+3. **Role-Based Access**:
+   - ProtectedRoute component checks user role and redirects accordingly.
+   - Citizens: Access /dashboard for reporting issues and tracking.
+   - Officers: Access /officer-dashboard.
+   - Admins: Access /admin-dashboard for officer approval.
+
+4. **Dashboard Interactions**:
+   - Admin: Fetches pending officers via API, approves them.
+   - Citizen: Displays user info, provides buttons for issue reporting and status tracking (UI only, backend integration assumed).
+   - All dashboards have logout functionality that clears auth state and redirects to MainPage.
+
+5. **API Integration**: All backend calls go through the centralized client.ts, which handles JWT attachment and error handling.
+
+## Technologies Used
+
+### Core Technologies
+- **React 19**: Frontend framework for building the user interface.
+- **TypeScript**: Provides static typing for better code quality and developer experience.
+- **Vite**: Build tool and development server for fast development and optimized production builds.
+
+### Routing and State Management
+- **React Router DOM 7.10.1**: Handles client-side routing and navigation.
+- **React Context**: For global state management (authentication).
+
+### HTTP Client and Authentication
+- **Axios**: For making HTTP requests to the backend API.
+- **jwt-decode 4.0.0**: For decoding and validating JWT tokens.
+
+### Development Tools
+- **ESLint**: Code linting for maintaining code quality.
+- **TypeScript ESLint**: TypeScript-specific linting rules.
+- **Vite Plugins**: For React and other integrations.
+
+### Styling
+- **CSS Modules**: Component-scoped styling (e.g., MainPage.css).
+
+## Other Report Requirements
+
+### Setup and Installation
+1. Ensure Node.js and npm are installed.
+2. Clone the repository and navigate to the project directory.
+3. Run `npm install` to install dependencies.
+4. Configure the backend API URL in `src/api/client.ts` (currently set to 'http://192.168.1.2:8080/api').
+5. Run `npm run dev` to start the development server.
+6. For production build: `npm run build` followed by `npm run preview`.
+
+### Key Features
+- **Role-Based Authentication**: Supports Citizen, Officer, and Admin roles with different permissions.
+- **OTP Verification**: Email-based OTP for signup and password reset to ensure account security.
+- **JWT Token Management**: Automatic token attachment to requests and session expiration handling.
+- **Responsive UI**: Designed for web access with potential mobile compatibility.
+- **Error Handling**: Comprehensive error messages for authentication and API failures.
+- **Auto-Redirects**: Seamless navigation based on user authentication status and role.
+
+### Assumptions and Dependencies
+- Backend API is running on the specified IP/port with endpoints for auth, admin, etc.
+- Database handles user roles, officer approvals, and issue tracking (not part of frontend).
+- Email service for OTP delivery is handled by the backend.
+
+### Future Enhancements
+- Implement full issue reporting and tracking functionality in Citizen dashboard.
+- Add Officer dashboard features for managing assigned issues.
+- Enhance UI with more interactive elements and real-time updates.
+- Add unit tests for components and hooks.
+- Implement push notifications for issue status updates.
+
+### Security Considerations
+- JWT tokens are stored in localStorage (consider more secure storage like httpOnly cookies).
+- Password visibility toggle for better UX.
+- Input validation and sanitization.
+- Auto-logout on token expiration.
+
+This report provides a comprehensive overview of the CivicPulse Hub frontend application, covering its structure, functionality, flow, and technical stack.

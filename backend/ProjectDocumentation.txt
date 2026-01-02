@@ -1,0 +1,101 @@
+# CivicPulse Backend Project Documentation
+
+## Introduction
+This document provides a comprehensive overview of the CivicPulse backend project, a Spring Boot-based application designed for civic engagement. It covers the file structure, module functionalities, project flow, technologies used, and other relevant report requirements.
+
+## File Structure
+The project follows a standard Maven-based Spring Boot structure:
+
+- **Root Level:**
+  - `.gitattributes`, `.gitignore`: Git configuration files.
+  - `mvnw`, `mvnw.cmd`: Maven wrapper scripts for building the project.
+  - `pom.xml`: Maven configuration file defining dependencies and build settings.
+  - `target/`: Directory containing compiled classes and build artifacts.
+
+- **src/main/java/com/civicpulse/backend/**:
+  - `BackendApplication.java`: Main Spring Boot application class that bootstraps the application.
+  - **config/**: Configuration classes for security, JWT, and data seeding.
+    - `DataSeeder.java`: Seeds initial data (e.g., default admin user) on application startup.
+    - `JwtAuthenticationFilter.java`: Handles JWT token validation and user authentication.
+    - `SecurityConfig.java`: Configures Spring Security, CORS, and authorization rules.
+  - **controller/**: REST API controllers handling HTTP requests.
+    - `AdminController.java`: Endpoints for admin operations like approving officers.
+    - `AuthController.java`: Handles authentication (signup, signin, OTP, password reset).
+    - `CitizenController.java`: Provides citizen-specific endpoints (e.g., dashboard).
+    - `OfficerController.java`: Manages officer-related functionalities (e.g., assigned complaints).
+    - `ResetPasswordRequest.java`: DTO for password reset requests.
+  - **model/**: JPA entity classes.
+    - `User.java`: Represents the User entity with fields like email, role, department, etc.
+  - **repository/**: Data access layer using Spring Data JPA.
+    - `UserRepository.java`: Interface for user-related database operations.
+  - **services/**: Business logic layer.
+    - `CustomUserDetailsService.java`: Implements Spring Security's UserDetailsService for loading user details.
+    - `OtpService.java`: Manages OTP generation, verification, and email sending.
+
+- **src/main/resources/**:
+  - `application.properties`: Configuration properties for database, JWT, and email settings.
+  - `static/`, `templates/`: Directories for static assets and templates (currently empty).
+
+- **src/test/java/com/civicpulse/backend/**:
+  - `BackendApplicationTests.java`: Basic Spring Boot test to verify application context loads.
+
+## Technologies Used
+- **Java**: Version 21, the programming language used for development.
+- **Spring Boot**: Version 3.4.12, framework for building the application with auto-configuration.
+- **Spring Security**: For authentication, authorization, and JWT-based security.
+- **Spring Data JPA**: For ORM and database interactions.
+- **Hibernate**: ORM tool for database operations.
+- **MySQL**: Relational database for data persistence.
+- **JWT (JSON Web Tokens)**: For stateless authentication.
+- **Lombok**: Library for reducing boilerplate code (e.g., getters, setters).
+- **Maven**: Build tool and dependency management.
+- **Email Services**: SMTP for sending OTP emails via Gmail.
+- **JUnit**: For unit testing (basic context loading test included).
+
+## Module Functionality
+- **BackendApplication**: Entry point of the application, initializes the Spring context.
+- **Config Module**:
+  - SecurityConfig: Defines security policies, CORS settings for frontend integration, and password encoding.
+  - JwtAuthenticationFilter: Intercepts requests to validate JWT tokens and set user authentication context.
+  - DataSeeder: Automatically creates a default admin user on startup if not present.
+- **Controller Module**:
+  - AuthController: Manages user authentication including signup with OTP verification, signin, password reset, and role-based access.
+  - CitizenController: Provides access to citizen-specific features like dashboards (under development).
+  - OfficerController: Handles officer functionalities such as viewing assigned complaints (under development).
+  - AdminController: Allows admins to approve pending officers and manage user roles.
+- **Model Module**:
+  - User: JPA entity representing users with attributes like name, email, role (CITIZEN, OFFICER, ADMIN), department, ward number, and enabled status.
+- **Repository Module**:
+  - UserRepository: Provides CRUD operations and custom queries for users, such as finding by email or role.
+- **Services Module**:
+  - OtpService: Generates and sends OTPs via email, verifies them, and manages email verification status.
+  - CustomUserDetailsService: Loads user details from the database for Spring Security authentication, including role-based authorities.
+
+## Project Flow
+1. **Application Startup**: DataSeeder creates a default admin user. SecurityConfig sets up authentication and authorization rules.
+2. **User Registration (Signup)**:
+   - User requests OTP for signup or password reset.
+   - OtpService generates and sends OTP via email.
+   - User verifies OTP; if valid, proceeds to create account or reset password.
+   - For signup, role is assigned (CITIZEN auto-enabled, OFFICER pending approval).
+3. **User Login (Signin)**:
+   - User provides credentials; AuthController validates and generates JWT token.
+   - JwtAuthenticationFilter validates subsequent requests using the token.
+4. **Role-Based Access**:
+   - Citizens access citizen-specific endpoints.
+   - Officers access officer endpoints after admin approval.
+   - Admins manage users and approvals.
+5. **Security Flow**: All requests are filtered through JwtAuthenticationFilter for token validation. SecurityConfig enforces role-based permissions.
+
+## Other Report Requirements
+- **Testing**: Basic unit test in BackendApplicationTests to ensure application context loads. Expand with integration tests for controllers and services.
+- **Deployment**: Use Maven to build the JAR (`mvn clean package`). Deploy to a server with MySQL database. Configure environment variables for sensitive data like JWT secret and email credentials.
+- **Security Considerations**: JWT tokens expire in 1 minute (configurable). Passwords are hashed using BCrypt. CORS configured for frontend integration. OTPs are stored temporarily and cleaned up periodically.
+- **Database Schema**: User table created automatically via JPA/Hibernate with fields for user data and roles.
+- **Email Configuration**: Uses Gmail SMTP; credentials stored in application.properties (consider environment variables for production).
+- **Scalability**: Stateless JWT authentication supports horizontal scaling. OTP service uses in-memory storage (consider Redis for distributed setups).
+- **Future Enhancements**: Implement full citizen and officer dashboards, complaint management, and integrate with frontend (e.g., React).
+- **Dependencies**: All managed via Maven; key ones include Spring Boot starters, MySQL connector, JWT library, and Lombok.
+- **Version Control**: Git used; ignore files configured for Maven and IDE artifacts.
+
+This documentation provides a complete overview for understanding, maintaining, and extending the CivicPulse backend project.

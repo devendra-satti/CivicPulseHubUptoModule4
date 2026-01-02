@@ -1,0 +1,378 @@
+/* Import Google Font */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+/* Basic Resets */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  /* Prevent default browser scrollbar to force our custom panel scrolling */
+  overflow: hidden; 
+}
+
+/* Main Container */
+.auth-container {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden; /* Keep hidden here, we scroll inside the panels */
+  background-color: #f5f5f5;
+}
+
+/* --- LEFT PANEL STYLES --- */
+.left-panel {
+  flex: 1.3;
+  background: linear-gradient(135deg, #2fdbfd 0%, #00aaff 100%);
+  color: white;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  
+  /* --- SCROLL FIX START --- */
+  height: 100%;        /* Force full height */
+  overflow-y: auto;    /* Enable vertical scroll if content is tall */
+  /* Hide Scrollbar for cleaner look (Firefox) */
+  scrollbar-width: none; 
+  /* Hide Scrollbar (IE/Edge) */
+  -ms-overflow-style: none; 
+  /* --- SCROLL FIX END --- */
+}
+
+/* Hide Scrollbar (Chrome/Safari/Opera) */
+.left-panel::-webkit-scrollbar {
+  display: none;
+}
+
+.brand-logo {
+  position: relative;
+  top: auto;
+  left: auto;
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 20px;
+  flex-shrink: 0;
+}
+
+.content-wrapper {
+  max-width: 900px;
+  text-align: center;
+  margin-top: auto; 
+  margin-bottom: auto;
+  width: 100%;
+  /* Added padding so bottom content isn't cut off when scrolling */
+  padding-bottom: 40px; 
+}
+
+.welcome-title {
+  font-size: 3rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.welcome-subtitle {
+  font-size: 1.1rem;
+  opacity: 0.9;
+  margin-bottom: 2rem;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.cta-btn {
+  background: white;
+  color: #00aaff;
+  border: none;
+  padding: 12px 30px;
+  border-radius: 25px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-bottom: 3rem;
+}
+
+.cta-btn:hover {
+  transform: translateY(-5px);
+  transition: transform 0.3s;
+}
+
+/* Feature Cards Grid */
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.feature-card {
+  background: rgba(255, 255, 255, 0.95);
+  color: #333;
+  padding: 35px 30px;
+  border-radius: 15px;
+  text-align: center;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s;
+}
+
+.feature-card:hover {
+  transform: translateY(-5px);
+}
+
+.card-icon {
+  color: #00aaff;
+  margin-bottom: 15px;
+}
+
+.feature-card h3 {
+  font-size: 1.1rem;
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+
+.feature-card p {
+  font-size: 0.85rem;
+  color: #666;
+  line-height: 1.5;
+}
+
+
+/* --- RIGHT PANEL (SCROLL FIX) --- */
+.right-panel {
+  flex: 1;
+  background: #f4f7f6;
+  
+  /* Use Flexbox to center horizontally only */
+  display: flex;
+  flex-direction: column; /* Stack items */
+  align-items: center;    /* Center horizontally */
+  
+  padding: 20px;
+  height: 100%;
+  overflow-y: auto;       /* Enable vertical scrolling */
+}
+
+.auth-box {
+  width: 100%;
+  max-width: 420px;
+  background: white;
+  padding: 40px;
+  border-radius: 20px;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.05);
+
+  /* --- THE FIX --- */
+  /* Prevent the box from shrinking if space is tight */
+  flex-shrink: 0;
+  
+  /* instead of 'margin: auto', we use a safe margin approach */
+  margin-top: auto;    /* Pushes to center if space exists */
+  margin-bottom: auto; /* Pushes to center if space exists */
+  
+  /* CRITICAL: Ensure there is ALWAYS space at the top/bottom */
+  /* This overrides 'auto' when the screen is too small */
+  min-height: min-content; 
+}
+
+/* Mobile Fix: When screen is short, forget centering and just stack it */
+@media (max-height: 800px) {
+  .auth-box {
+    margin-top: 40px; 
+    margin-bottom: 40px;
+  }
+}
+
+/* Tabs */
+.auth-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  margin-bottom: 30px;
+  border-bottom: 1px solid #eee;
+}
+
+.tab-btn {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #aaa;
+  padding-bottom: 10px;
+  cursor: pointer;
+  transition: all 0.3s;
+  position: relative;
+}
+
+.tab-btn.active {
+  color: #333;
+}
+
+.tab-btn.active::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: #00aaff;
+  border-radius: 2px;
+}
+
+/* Form Inputs */
+input {
+  width: 100%;
+  padding: 10px;
+  margin: 8px 0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.input-group {
+  margin-bottom: 15px;
+}
+
+.input-group label {
+  display: block;
+  font-size: 0.85rem;
+  color: #555;
+  margin-bottom: 6px;
+  font-weight: 500;
+}
+
+/* Fixed select input styling to match text inputs */
+.input-group select {
+  width: 100%;
+  padding: 12px 15px;
+  border: 1px solid #e1e1e1;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  outline: none;
+  transition: border-color 0.3s;
+  background: #f9f9f9;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 12px 15px;
+  border: 1px solid #e1e1e1;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  outline: none;
+  transition: border-color 0.3s;
+  background: #f9f9f9;
+}
+
+.input-group input:focus, .input-group select:focus {
+  border-color: #00aaff;
+  background: white;
+}
+
+.submit-btn {
+  width: 100%;
+  padding: 12px;
+  background: #00aaff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 10px;
+  box-shadow: 0 4px 10px rgba(0, 170, 255, 0.2);
+}
+
+.submit-btn:hover {
+  background: #0099e6;
+}
+
+.forgot-pass {
+  text-align: center;
+  margin-top: 15px;
+  color: #777;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.forgot-pass:hover {
+  color: #00aaff;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .cards-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 768px) {
+  /* On Mobile, remove the fixed height and allow normal scrolling */
+  body { overflow: auto; } 
+  .auth-container { flex-direction: column; height: auto; overflow: visible; }
+  .left-panel { height: auto; padding: 40px 20px; overflow: visible;}
+  .right-panel { height: auto; padding: 40px 20px; background: white; overflow: visible;}
+  .auth-box { box-shadow: none; padding: 0; }
+}
+
+
+.verify-btn {
+    position: absolute;
+    right: 1px;
+    top: 50%;
+    transform: translateY(-50%); /* Center vertically */
+    padding: 6px 14px;
+    background-color: #00aaff;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    z-index: 5;
+    height: 70%; /* Ensure it fits nicely */
+}
+
+.verify-btn:hover {
+    background-color: #008ecc;
+}
+
+.verify-btn:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+/* Green Tick Badge */
+.verified-badge {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.1rem;
+    z-index: 5;
+}
+
+/* Spinner Animation */
+.spinner {
+    position: absolute;
+    right: 12px;
+    top: 14px;
+    display: inline-block;
+    animation: spin 1s linear infinite;
+    color: #00aaff;
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Smooth Fade In for OTP Input */
+.animate-fade-in {
+    animation: slideDown 0.4s ease-out forwards;
+}
+
+@keyframes slideDown {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
